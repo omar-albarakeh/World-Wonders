@@ -35,7 +35,7 @@ axios.get('https://www.world-wonders-api.org/v0/wonders')
       
       listItem.innerHTML = `<div class="wonder-item-content">
                                <a href="details.html?id=${wonder.id}">
-                               <img src="${wonder.links.images}" alt="${wonder.name}">
+                               <img src="${wonder.links.images[0]}" alt="${wonder.name}">
                                </div>`;
       
       wondersList.appendChild(listItem);
