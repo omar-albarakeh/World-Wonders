@@ -24,4 +24,23 @@
     ]
   }
 ]*/
-
+const wondersList = document.getElementById('wonders-list');
+axios.get('https://www.world-wonders-api.org/v0/wonders')
+  .then(response => {
+    const wonders = response.data;
+    
+    wonders.forEach(wonder => {
+      const listItem = document.createElement('li');
+      listItem.classList.add('wonder-item');
+      
+      listItem.innerHTML = `<div class="wonder-item-content">
+                               <a href="details.html?id=${wonder.id}">
+                               <img src="${wonder.links.images}" alt="${wonder.name}">
+                               </div>`;
+      
+      wondersList.appendChild(listItem);
+    });
+  })
+  .catch(error => {
+    console.error('Error fetching wonders:', error);
+  });
