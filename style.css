@@ -44,3 +44,20 @@ h1 {
   justify-content: center;
   text-align: center;
 }
+
+.wonders-short-details {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: green;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 300px;
+  max-width: 90%;
+  z-index: 1000;
+  text-align: center;
+}

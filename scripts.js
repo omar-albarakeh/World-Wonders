@@ -25,20 +25,37 @@
   }
 ]*/
 const wondersList = document.getElementById('wonders-list');
+const details = document.getElementById("wonders-short-details");
+
 axios.get('https://www.world-wonders-api.org/v0/wonders')
   .then(response => {
     const wonders = response.data;
-    
+
     wonders.forEach(wonder => {
       const listItem = document.createElement('li');
       listItem.classList.add('wonder-item');
-      
+
       listItem.innerHTML = `<div class="wonder-item-content">
                                <a href="details.html?id=${wonder.id}">
+                                 <img src="${wonder.links.images[0]}" alt="${wonder.name}">
+                                 <p>${wonder.name}</p>
+                               </a>
+                             </div>`;
+
+      listItem.addEventListener("mouseover", () => {
+        details.style.display = "block";
+        details.innerHTML = `<div class="wonder-item-content">
                                <img src="${wonder.links.images[0]}" alt="${wonder.name}">
-                               <p>${wonder.name}</p>
-                               </div>`;
-      
+                               <h2>${wonder.name}</h2>
+                               <p>${wonder.summary}</p>
+                               <p><strong>Location:</strong> ${wonder.location}</p>
+                             </div>`;
+      });
+
+      listItem.addEventListener("mouseout", () => {
+        details.style.display = "none";
+      });
+
       wondersList.appendChild(listItem);
     });
   })

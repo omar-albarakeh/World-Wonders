@@ -24,25 +24,22 @@
     ]
   }
 ]*/
+
 const wonderDetails = document.getElementById('wonder-details');
 
 const wonderId = new URLSearchParams(window.location.search).get('id');
 
-axios.get('https://www.world-wonders-api.org/v0/wonders')
-.then(response=>{
-    const wonder=response.data;
-     wonderDetails.innerHTML = `
-      <h2>${wonder.name}</h2>
-      <p>${wonder.summary}</p>
-      <p>${wonder.location}</p>
-      <p>${wonder.build_year}</p>
-      <p>${wonder.time_period}</p>
-      <img src="${wonder.links.image}" alt="${wonder.name}">
-      <a src="${wonder.links.wiki}" alt="${wonder.name}">
-      <a src="${wonder.links.britannica}" alt="${wonder.name}">
-      <a src="${wonder.links.google_maps}" alt="${wonder.name}">
-      <a src="${wonder.links.trip_advisor}" alt="${wonder.name}">
-    `;
+axios.get(`https://www.world-wonders-api.org/v0/wonders/${wonderId}`)
+ .then(response=>{
+  const wonder=response.data;
+  wonderDetails.innerHTML = `
+    <h2>${wonder.name}</h2>
+    <p>${wonder.summary}</p>
+    <p>${wonder.location}</p>
+    <p>${wonder.build_year}</p>
+    <p>${wonder.time_period}</p>
+    <img src="${wonder.links.images[0]}" alt="${wonder.name}">
+  `;
 }) .catch(error => {
-    console.error('Error fetching wonder details:', error);
-  });
+  console.error('Error fetching wonder details:', error);
+});
