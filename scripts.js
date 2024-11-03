@@ -1,64 +1,53 @@
-/*[
-  {
-    "name": "Great Pyramid of Giza",
-    "summary": "The largest Egyptian pyramid, it served as the tomb of pharaoh Khufu, who ruled during the Fourth Dynasty of the Old Kingdom. The pyramid is the oldest of the Seven Wonders of the Ancient World, and the only wonder that has remained largely intact.",
-    "location": "Giza, Egypt, Africa",
-    "build_year": -2560,
-    "time_period": "Ancient",
-    "links": {
-      "wiki": "https://en.wikipedia.org/wiki/Great_Pyramid_of_Giza",
-      "britannica": "https://www.britannica.com/place/Great-Pyramid-of-Giza",
-      "google_maps": "https://www.google.com/maps/place/The+Great+Pyramid+of+Giza/@29.9791705,31.1342046,17z/data=!3m1!4b1!4m6!3m5!1s0x14584587ac8f291b:0x810c2f3fa2a52424!8m2!3d29.9791705!4d31.1342046!16zL20vMDM2bWs",
-      "trip_advisor": "https://www.tripadvisor.com/Attraction_Review-g294202-d308887-Reviews-Great_Pyramid_of_Cheops_Khufu-Giza_Giza_Governorate.html",
-      "images": [
-        "https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg",
-        "https://cdn.britannica.com/75/178475-050-E9212E3D/Pyramid-of-Khufu-Giza-Egypt.jpg",
-        "https://cdn.britannica.com/06/122506-050-C8E03A8A/Pyramid-of-Khafre-Giza-Egypt.jpg",
-        "https://cdn.britannica.com/87/194387-050-CC38D282/Cross-section-interior-Great-Pyramid-of-Khufu.jpg"
-      ]
-    },
-    "categories": [
-      "SevenWonders",
-      "Civ5",
-      "Civ6"
-    ]
-  }
-]*/
-const wondersList = document.getElementById('wonders-list');
-const details = document.getElementById("wonders-short-details");
+document.addEventListener("DOMContentLoaded", () => {
+    const wondersList = document.getElementById('wonders-list');
+    const details = document.getElementById("wonders-short-details");
 
-axios.get('https://www.world-wonders-api.org/v0/wonders')
-  .then(response => {
-    const wonders = response.data;
+    axios.get('https://www.world-wonders-api.org/v0/wonders')
+        .then(response => {
+            const wonders = response.data;
 
-    wonders.forEach(wonder => {
-      const listItem = document.createElement('li');
-      listItem.classList.add('wonder-item');
+            wonders.forEach(wonder => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('wonder-item');
 
-      listItem.innerHTML = `<div class="wonder-item-content">
-                               <a href="details.html?id=${wonder.id}">
-                                 <img src="${wonder.links.images[0]}" alt="${wonder.name}">
-                                 <p>${wonder.name}</p>
-                               </a>
-                             </div>`;
+                listItem.innerHTML = `
+                    <div class="wonder-item-content">
+                        <a href="details.html?id=${wonder.id}">
+                            <img src="${wonder.links.images[0]}" alt="${wonder.name}">
+                            <p>${wonder.name}</p>
+                        </a>
+                    </div>`;
 
-      listItem.addEventListener("mouseover", () => {
-        details.style.display = "block";
-        details.innerHTML = `<div class="wonder-item-content">
-                               <img src="${wonder.links.images[0]}" alt="${wonder.name}">
-                               <h2>${wonder.name}</h2>
-                               <p>${wonder.summary}</p>
-                               <p><strong>Location:</strong> ${wonder.location}</p>
-                             </div>`;
-      });
+                listItem.addEventListener("mouseenter", () => {
+                    details.style.display = "block";
+                    details.innerHTML = `
+                        <div class="wonder-popup">
+                            <h2>${wonder.name}</h2>
+                            <p><strong>Location:</strong> ${wonder.location}</p>
+                            <p><strong>Location:</strong> ${wonder.build_year}</p>
+                            <h3>For More Information Click in the Image</h3>
+                        </div>`;
+                });
 
-      listItem.addEventListener("mouseout", () => {
-        details.style.display = "none";
-      });
+                listItem.addEventListener("mousemove", (e) => {
+                    const viewportWidth = window.innerWidth;
 
-      wondersList.appendChild(listItem);
-    });
-  })
-  .catch(error => {
-    console.error('Error fetching wonders:', error);
-  });
+                    if (e.pageX < viewportWidth * 0.6) {
+                        details.style.left = `${e.pageX + 15}px`;
+                    } else {
+                        details.style.left = `${e.pageX - details.offsetWidth - 15}px`;
+                    }
+                    details.style.top = `${e.pageY + 15}px`;
+                  });
+
+                listItem.addEventListener("mouseleave", () => {
+                    details.style.display = "none";
+                });
+
+                wondersList.appendChild(listItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching wonders:', error);
+        });
+});
